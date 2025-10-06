@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: df_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: df_research
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d df_research"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    # Redis Stack provides Redis core + extra modules + RedisInsight web UI
+    image: redis/redis-stack:latest
+    container_name: df_redis
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    ports:
+      - "6379:6379"   # Redis port
+      - "8001:8001"   # RedisInsight / Stack UI (if available in image)
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+    name: df_pgdata
+  redisdata:
+    name: df_redisdata
+
+networks:
+  default:
+    name: df_network

@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Deep Finance Research Chatbot Design System 
+Professional financial interface with dark theme optimization
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Light theme (fallback) */
+    --background: 216 50% 98%;
+    --foreground: 213 31% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 213 31% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 31% 15%;
+
+    --primary: 217 91% 59%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 213 31% 15%;
+
+    --muted: 214 32% 91%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 43 96% 56%;
+    --accent-foreground: 213 31% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 217 91% 59%;
+
+    --radius: 0.75rem;
+
+    /* Custom finance theme colors */
+    --finance-blue-deep: 213 78% 15%;
+    --finance-blue-primary: 217 91% 59%;
+    --finance-blue-light: 214 50% 85%;
+    --finance-gold: 43 96% 56%;
+    --finance-gold-light: 48 96% 70%;
+    --finance-green: 142 76% 36%;
+    --finance-red: 0 84% 60%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--finance-blue-deep)), hsl(var(--finance-blue-primary)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--finance-gold)), hsl(var(--finance-gold-light)));
+    
+    /* Shadows */
+    --shadow-elegant: 0 10px 40px -10px hsl(var(--finance-blue-deep) / 0.15);
+    --shadow-glow: 0 0 30px hsl(var(--finance-blue-primary) / 0.2);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark finance theme - optimized for research sessions */
+    --background: 213 78% 8%;
+    --foreground: 214 50% 95%;
+
+    --card: 213 65% 12%;
+    --card-foreground: 214 50% 95%;
+
+    --popover: 213 65% 12%;
+    --popover-foreground: 214 50% 95%;
+
+    --primary: 217 91% 59%;
+    --primary-foreground: 213 78% 8%;
+
+    --secondary: 213 40% 18%;
+    --secondary-foreground: 214 50% 85%;
+
+    --muted: 213 40% 15%;
+    --muted-foreground: 215 16% 55%;
+
+    --accent: 43 96% 56%;
+    --accent-foreground: 213 78% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 213 30% 25%;
+    --input: 213 40% 18%;
+    --ring: 217 91% 59%;
+
+    /* Dark sidebar colors */
+    --sidebar-background: 213 78% 10%;
+    --sidebar-foreground: 214 50% 85%;
+    --sidebar-primary: 217 91% 59%;
+    --sidebar-primary-foreground: 213 78% 8%;
+    --sidebar-accent: 213 40% 15%;
+    --sidebar-accent-foreground: 214 50% 85%;
+    --sidebar-border: 213 30% 20%;
+    --sidebar-ring: 217 91% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Finance-specific utility classes */
+  .finance-gradient {
+    background: var(--gradient-primary);
+  }
+  
+  .finance-accent-gradient {
+    background: var(--gradient-accent);
+  }
+  
+  .finance-shadow {
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  .finance-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .finance-transition {
+    transition: var(--transition-smooth);
+  }
+  
+  .finance-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Chat message animations */
+  .message-slide-in {
+    animation: slideIn 0.4s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Typing indicator */
+  .typing-dots {
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  
+  .typing-dots:nth-child(2) {
+    animation-delay: -1.2s;
+  }
+  
+  .typing-dots:nth-child(3) {
+    animation-delay: -1.0s;
+  }
+}

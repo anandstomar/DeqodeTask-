@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+requests
+beautifulsoup4
+pydantic
+redis
+aioredis
+httpx
+pytest
+# the LLM/langgraph libs you use - ensure these match your environment:
+langgraph
+langgraph.checkpoint.redis
+langchain_google_genai
