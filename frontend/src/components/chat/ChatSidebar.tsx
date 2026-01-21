@@ -140,6 +140,15 @@ export default function ChatSidebar({
 
 
   // const threadsToShow = (serverThreads && serverThreads.length > 0) ? serverThreads : (threads ?? []);
+
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+        if (user?.id) {
+          setCurrentUserId(user.id);
+        }
+    })();
+  }, [currentUserId]);
  
   const threadsToShow = Array.isArray(threads) ? threads : [];
 
