@@ -7,6 +7,18 @@ Professional financial interface with dark theme optimization
 All colors MUST be HSL.
 */
 
+/* caret blink animation */
+@keyframes type-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* utility class used above */
+.animate-type-caret {
+  animation: type-caret 1s steps(1, end) infinite;
+}
+
+
 @layer base {
   :root {
     /* Light theme (fallback) */

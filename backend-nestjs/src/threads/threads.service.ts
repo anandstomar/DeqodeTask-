@@ -170,18 +170,18 @@ export class ThreadsService {
 
   async getMessages(user_id: string, thread_id: string) {
 
-    try {
-      const raw = await this.redis.getKey(this.key(user_id, thread_id));
-      if (raw) {
-        const state = JSON.parse(raw);
-        if (Array.isArray(state.messages) && state.messages.length > 0) {
-          return state.messages;
-        }
-      }
-    } catch (err) {
-      this.logger.warn('Redis read for messages failed', err instanceof Error ? err.message : String(err));
+    // try {
+    //   const raw = await this.redis.getKey(this.key(user_id, thread_id));
+    //   if (raw) {
+    //     const state = JSON.parse(raw);
+    //     if (Array.isArray(state.messages) && state.messages.length > 0) {
+    //       return state.messages;
+    //     }
+    //   }
+    // } catch (err) {
+    //   this.logger.warn('Redis read for messages failed', err instanceof Error ? err.message : String(err));
 
-    }
+    // }
 
 
     try {

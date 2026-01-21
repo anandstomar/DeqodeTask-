@@ -37,11 +37,12 @@ async def api_run(req: RunRequest):
 
 @app.post("/api/agent/stream")
 async def api_stream(req: RunRequest):
+    print("Received stream request:", req)
     """
     SSE streaming endpoint. Client should listen to text/event-stream.
     Each event is JSON in the form: {event: str, payload: ...}
     """
-    generator = stream_run(req.question, user_id=req.user_id, thread_id=req.thread_id)
+    generator = stream_run(req.question, user_id=req.user_id, thread_id=req.thread_id )
     return StreamingResponse(generator, media_type="text/event-stream")
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { createThread, getCurrentUser, getThreads, deleteThread } from "@/lib/api";
+import { createThread, getCurrentUser, getThreads, getThreadMessages, deleteThread } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 interface ChatSidebarProps {
@@ -34,74 +34,114 @@ export default function ChatSidebar({
 }: ChatSidebarProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [serverThreads, setServerThreads] = useState<ChatThread[]>([]);
+  //const [serverThreads, setServerThreads] = useState<ChatThread[]>([]);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
 
+  //const [messages, setMessages] = useState<any[]>([]);
 
-  const normalizeThreads = (raw: any[]): ChatThread[] => {
-    if (!Array.isArray(raw)) return [];
-    return raw.map((t: any) => {
-      const src = t.db ?? t;
-      const id = src.id ?? src.threadId ?? `thread-${Date.now()}`;
-      const title =
-        src.title ??
-        (typeof src.question === "string" ? (src.question.length > 80 ? `${src.question.slice(0, 77)}...` : src.question) : `Thread ${id}`);
-      const preview = src.preview ?? (src.question ? String(src.question).slice(0, 120) : "");
-      const messagesArr = Array.isArray(src.messages) ? src.messages : (src.db?.messages ?? []);
-      const timestamp = src.updatedAt ? new Date(src.updatedAt) : src.createdAt ? new Date(src.createdAt) : new Date();
+  // const normalizeThreads = (raw: any[]): ChatThread[] => {
+  //   if (!Array.isArray(raw)) return [];
+  //   return raw.map((t: any) => {
+  //     const src = t.db ?? t;
+  //     const id = src.id ?? src.threadId ?? `thread-${Date.now()}`;
+  //     const title =
+  //       src.title ??
+  //       (typeof src.question === "string" ? (src.question.length > 80 ? `${src.question.slice(0, 77)}...` : src.question) : `Thread ${id}`);
+  //     const preview = src.preview ?? (src.question ? String(src.question).slice(0, 120) : "");
+  //     const messagesArr = Array.isArray(src.messages) ? src.messages : (src.db?.messages ?? []);
+  //     const timestamp = src.updatedAt ? new Date(src.updatedAt) : src.createdAt ? new Date(src.createdAt) : new Date();
 
-      return {
-        id,
-        title,
-        preview,
-        messages: messagesArr || [],
-        timestamp,
-      } as ChatThread;
-    });
-  };
-
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      setLoading(true);
-      try {
-        const user = await getCurrentUser();
-        if (!mounted) return;
-        if (user?.id) {
-          setCurrentUserId(user.id);
-          try {
-            const data = await getThreads(user.id);
-            let arr: any[] = [];
-            if (!data) arr = [];
-            else if (Array.isArray(data)) arr = data;
-            else if (Array.isArray(data.db)) arr = data.db;
-            else if (Array.isArray(data.threads)) arr = data.threads;
-            else if (data.rows && Array.isArray(data.rows)) arr = data.rows;
-            else arr = Array.isArray((data as any)) ? (data as any) : [];
-            const normalized = normalizeThreads(arr);
-            setServerThreads(normalized);
-          } catch (e) {
-            console.warn("getThreads failed", e);
-            setServerThreads([]);
-          }
-        } else {
-          setCurrentUserId(localStorage.getItem("df_research_user_id") || null);
-        }
-      } catch (e) {
-        console.warn("Failed to fetch current user / threads", e);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  //     return {
+  //       id,
+  //       title,
+  //       preview,
+  //       messages: messagesArr || [],
+  //       timestamp,
+  //     } as ChatThread;
+  //   });
+  // };
 
 
-  const threadsToShow = (serverThreads && serverThreads.length > 0) ? serverThreads : (threads ?? []);
+
+
+//   useEffect(() => {
+//     let mounted = true;
+//     (async () => {
+//       setLoading(true);
+//       try {
+//         const user = await getCurrentUser();
+//         if (!mounted) return;
+//         if (user?.id) {
+//           setCurrentUserId(user.id);
+//           try {
+//             const data = await getThreads(user.id);
+//             let arr: any[] = [];
+//             if (!data) arr = [];
+//             else if (Array.isArray(data)) arr = data;
+//             else if (Array.isArray(data.db)) arr = data.db;
+//             else if (Array.isArray(data.threads)) arr = data.threads;
+//             else if (data.rows && Array.isArray(data.rows)) arr = data.rows;
+//             else arr = Array.isArray((data as any)) ? (data as any) : [];
+//             const normalized = normalizeThreads(arr);
+//             setServerThreads(normalized);
+//           } catch (e) {
+//             console.warn("getThreads failed", e);
+//             setServerThreads([]);
+//           }
+//         } else {
+//           setCurrentUserId(localStorage.getItem("df_research_user_id") || null);
+//         }
+//       } catch (e) {
+//         console.warn("Failed to fetch current user / threads", e);
+//       } finally {
+//         if (mounted) setLoading(false);
+//       }
+//     })();
+//     return () => {
+//       mounted = false;
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//   let isMounted = true; // Prevents state updates if component unmounts
+
+//   if (!currentUserId || !currentThread) return;
+
+//   (async () => {
+//     try {
+//       // 2. Fetch the data
+//       const resp = await getThreadMessages(currentUserId, currentThread).catch(() => null);
+//       console.log('Messages fetched for thread', currentThread, ':', resp.length);
+      
+//       if (!isMounted) return;
+
+//       // 3. Normalize the data (using your logic)
+//       const arr = resp 
+//         ? (Array.isArray(resp) 
+//             ? resp 
+//             : (resp.db && Array.isArray(resp.db)) 
+//               ? resp.db 
+//               : (resp.redis && Array.isArray(resp.redis.messages))
+//                 ? resp.redis.messages
+//                 : [])
+//         : [];
+
+//       // 4. Update State (This triggers the re-render!)
+//       setMessages(arr);
+      
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   })();
+
+//   return () => { isMounted = false; };
+// }, [currentUserId, currentThread]);
+
+
+  // const threadsToShow = (serverThreads && serverThreads.length > 0) ? serverThreads : (threads ?? []);
+ 
+  const threadsToShow = Array.isArray(threads) ? threads : [];
 
   const handleNewChat = useCallback(async () => {
     const newThreadId = `thread-${Date.now()}`;
@@ -118,13 +158,13 @@ export default function ChatSidebar({
     try {
       await createThread({ user_id: userId!, thread_id: newThreadId, question });
       onThreadSelect(newThreadId);
-      try {
-        if (userId) {
-          const data = await getThreads(userId);
-          const arr = Array.isArray(data) ? data : (Array.isArray(data.db) ? data.db : []);
-          setServerThreads(normalizeThreads(arr));
-        }
-      } catch (e) { }
+      // try {
+      //   if (userId) {
+      //     const data = await getThreads(userId);
+      //     const arr = Array.isArray(data) ? data : (Array.isArray(data.db) ? data.db : []);
+      //     setServerThreads(normalizeThreads(arr));
+      //   }
+      // } catch (e) { }
     } catch (err) {
       console.error("createThread failed", err);
       onThreadSelect(newThreadId);
@@ -158,14 +198,14 @@ export default function ChatSidebar({
       await deleteThread(currentUserId, threadId);
 
 
-      setServerThreads(prev => prev.filter(t => t.id !== threadId));
+      // setServerThreads(prev => prev.filter(t => t.id !== threadId));
 
 
-      if (currentThread === threadId) {
-        try {
-          onThreadSelect('');
-        } catch { }
-      }
+      // if (currentThread === threadId) {
+      //   try {
+      //     onThreadSelect('');
+      //   } catch { }
+      // }
 
 
       if (typeof onThreadDelete === 'function') {
@@ -182,7 +222,7 @@ export default function ChatSidebar({
   };
 
 
-  return (
+   return (
     <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
       <div className="p-4 border-b border-sidebar-border">
         <div className="flex items-center space-x-2 mb-4">
@@ -229,9 +269,7 @@ export default function ChatSidebar({
                       {thread.title}
                     </h4>
                     <div className="flex items-center space-x-1">
-                      <span className="text-xs text-sidebar-foreground/60 whitespace-nowrap">
-                        {formatTime(thread.timestamp)}
-                      </span>
+                     
                       <AlertDialog>
                         <AlertDialogTrigger asChild onClick={(e) => e.stopPropagation()}>
                           <Button
@@ -276,12 +314,12 @@ export default function ChatSidebar({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-1 text-xs text-sidebar-foreground/60">
                       <MessageSquare className="h-3 w-3" />
-                      <span>{thread.messages?.length ?? 0}</span>
+                     <span>{thread.messages ? (thread.messages.length)/2 : 0}</span>
                     </div>
 
                     <div className="flex items-center space-x-1 text-xs text-sidebar-foreground/60">
                       <Clock className="h-3 w-3" />
-                      <span>{thread.timestamp.toLocaleDateString()}</span>
+                      <span>{formatTime(thread.timestamp)}</span>
                     </div>
                   </div>
                 </div>
@@ -297,3 +335,4 @@ export default function ChatSidebar({
     </div>
   );
 }
+
