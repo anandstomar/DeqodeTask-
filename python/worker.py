@@ -4,6 +4,8 @@ import re
 import os
 import time
 from agent_service import run_full, stream_run
+import threading  
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
 REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
@@ -19,6 +21,20 @@ r = redis.from_url(REDIS_URL, decode_responses=True)
 ps = r.pubsub(ignore_subscribe_messages=True)
 ps.subscribe(JOB_QUEUE)
 print(f"Worker subscribed to {JOB_QUEUE}")
+
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Worker is running")
+
+def start_dummy_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
+    print(f"Dummy health check server listening on port {port}")
+    server.serve_forever()
+
+threading.Thread(target=start_dummy_server, daemon=True).start()
 
 
 def _publish_object(channel: str, obj: object):
