@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./components/auth/LoginPages";
 import RegisterPage from "./components/auth/RegisterPages";
-import ChatLayout from "./components/chat/chatlayout";
+import ChatLayout from "./components/chat/ChatLayouts";
 
 const queryClient = new QueryClient();
 

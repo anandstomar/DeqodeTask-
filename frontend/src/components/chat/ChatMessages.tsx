@@ -8,7 +8,7 @@ import remarkGfm from "remark-gfm";
 // Make sure this path matches your file structure
 import TypewriterText from "./typewriters"; 
 
-import type { Message } from "./chatmain";
+import type { Message } from "./ChatMains";
 
 interface ChatMessageProps {
   message: Message;

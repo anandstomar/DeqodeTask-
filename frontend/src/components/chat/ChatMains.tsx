@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Download, Bot, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import ChatMessage from "./chatmessage";
+import ChatMessage from "./ChatMessages";
 
 import {
   createThread,

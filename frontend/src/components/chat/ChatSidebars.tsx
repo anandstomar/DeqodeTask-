@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import { Plus, MessageSquare, TrendingUp, Clock, Trash2 } from "lucide-react";
-import type { ChatThread } from "./chatlayout";
+import type { ChatThread } from "./ChatLayouts";
 import {
   AlertDialog,
   AlertDialogAction,
