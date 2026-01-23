@@ -26,6 +26,8 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Content-type", "text/plain")
         self.wfile.write(b"Worker is running")
 
 def start_dummy_server():
