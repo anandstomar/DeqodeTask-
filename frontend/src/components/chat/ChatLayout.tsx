@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo, useEffect} from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import ChatSidebar from "./ChatSidebar";
-import ChatMain, { type ThinkingStep, type Source, type Message } from "./ChatMain";
-import ChatSources from "./ChatSources";
+import ChatSidebar from "./chatsidebar";
+import ChatMain, { type ThinkingStep, type Source, type Message } from "./chatmain";
+import ChatSources from "./chatsources";
 import { getThreads, getCurrentUser } from "@/lib/api";
 
 

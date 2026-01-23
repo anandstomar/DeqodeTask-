@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 // Make sure this path matches your file structure
-import TypewriterText from "./TypeWriter"; 
+import TypewriterText from "./typewriters"; 
 
-import type { Message } from "./ChatMain";
+import type { Message } from "./chatmain";
 
 interface ChatMessageProps {
   message: Message;

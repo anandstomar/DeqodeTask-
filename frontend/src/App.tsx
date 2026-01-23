@@ -5,9 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import LoginPage from "./components/auth/LoginPage";
-import RegisterPage from "./components/auth/RegisterPage";
-import ChatLayout from "./components/chat/ChatLayout";
+import LoginPage from "./components/auth/loginpage";
+import RegisterPage from "./components/auth/registerpage";
+import ChatLayout from "./components/chat/chatlayout";
 
 const queryClient = new QueryClient();
 
