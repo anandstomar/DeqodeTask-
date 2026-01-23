@@ -38,9 +38,44 @@ const normalizeUrl = (url: string) => {
 export default function ChatLayout() {
   const [threads, setThreads] = useState<ChatThread[]>([]);
   const [currentThread, setCurrentThread] = useState<string | null>(null);
-
-  // Track which message is currently being viewed
   const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
+
+useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let isMounted = true; // Prevent state updates if user leaves page
+
+    const wakeUpWorker = async () => {
+      try {
+        console.log("🔄 Pinging Python worker to wake it up...");
+        
+        // We use standard fetch (not no-cors) to try and read the text
+        const res = await fetch("https://deqodetask-agenttask.onrender.com/");
+        
+        if (res.ok) {
+          const text = await res.text();
+          // CONDITION: If response matches, STOP the loop.
+          if (text.trim() === "Worker is running") {
+            console.log("✅ Worker is fully active! Stopping wake-up loop.");
+            return; // This exits the function, so setTimeout is never called again.
+          }
+        }
+      } catch (e) {
+        console.warn("⚠️ Worker sleeping or CORS blocking. Retrying in 10s...", e);
+      }
+
+      // If we haven't returned yet, schedule the next attempt
+      if (isMounted) {
+        timeoutId = setTimeout(wakeUpWorker, 10000); // 10 seconds
+      }
+    };
+
+    wakeUpWorker(); // Start the loop immediately on mount
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId); // Cleanup on unmount
+    };
+  }, []);
 
 
 useEffect(() => {
